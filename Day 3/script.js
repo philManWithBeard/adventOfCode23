@@ -14,40 +14,49 @@ import { rawData } from "./rawData.js";
 // Create array to hold structured data
 let partPosition = [];
 
-// Work out length of line
+// Work out length of line - checked
 const lengthOfLine = rawData.match(/\n/).index;
 
 // Remove all newlines from string
 const data = rawData.replace(/\n/g, "");
 
-// function to get the x and y position of the part
+// function to get the x and y position of the part /valid
 const xyPosition = (x, y) => [Math.floor(x / y), x % y];
 
+// valid
 const createPart = (partNumber) => {
   // find position of partNumber
-  let numberIndex = data.indexOf(partNumber);
+  let numberIndex = partNumber[0];
   const positionArray = xyPosition(numberIndex, lengthOfLine);
   // get the position of all digits in number
   let numberIndexArray = [];
-  for (let i = 0; i < partNumber.length; i++) {
+  for (let i = 0; i < partNumber[1].length; i++) {
     numberIndexArray.push(positionArray[1] + i);
   }
+  console.log(`
+  Part Number: ${partNumber[1]}
+  Position Array: ${positionArray}
+  `);
   partPosition.push({
     part: {
-      number: partNumber,
+      number: partNumber[1],
       xPosition: numberIndexArray,
       yPosition: positionArray[0],
     },
   });
 };
 
-// Take the raw data
-// identify all numbers between 1-999 and put them in an array
-// Call the partNumber function for each item in the array and pass in the partNumber
-let matches = rawData
-  .match(/(\d+)/g)
-  .forEach((partNumber) => createPart(partNumber));
+const regex = /(\d+)/gi;
 
+const indexPairs = [];
+
+let matchArr = [];
+
+while (null !== (matchArr = regex.exec(data))) {
+  createPart([matchArr.index, matchArr[1]]);
+}
+
+// test
 const targetSpaces = partPosition
   .map((part, i) => {
     const targetColumns = [];
@@ -74,10 +83,6 @@ const targetSpaces = partPosition
   })
   .flat();
 
-// const rightOf = part.xPosition.at(-1)++;
-
-// console.log(targetSpaces);
-
 const specialCharacterIndex = [];
 
 const splitData = data.split("");
@@ -87,25 +92,12 @@ for (let i = 0; i < splitData.length; i++) {
     specialCharacterIndex.push(i);
   }
 }
-// console.log(specialCharacterIndex);
-
-// const specialCharacterArray = specialCharacters.map((specialCharacter) => {
-//   // find position of special character
-//   let numberIndex = data.indexOf(specialCharacter);
-//   console.log(numberIndex);
-//   const positionArray = xyPosition(numberIndex, lengthOfLine);
-//   return positionArray;
-// });
 
 const countActualParts = [];
 
 const actualParts = specialCharacterIndex.forEach(
   (specialCharacterPosition) => {
-    // console.log(specialCharacterPosition);
     for (let s = 0; s < targetSpaces.length; s++) {
-      // console.log(s);
-      // console.log(targetSpaces[s]);
-      // console.log(specialCharacterPosition);
       if (specialCharacterPosition == targetSpaces[s][0]) {
         countActualParts.push(parseInt(targetSpaces[s][1]));
       }
