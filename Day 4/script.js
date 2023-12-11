@@ -17,6 +17,10 @@ const punterWin = (card) => {
   const matchingNumber = card.winningNumbers.filter((w) =>
     card.punterNumbers.includes(w)
   );
+  return matchingNumber;
+};
+
+const calculatePoints = (matchingNumber) => {
   const points = Math.pow(2, matchingNumber.length - 1);
   return points;
 };
@@ -25,7 +29,10 @@ const part1 = rawData
   .split(/\n/)
   .map(cardObjects)
   .map(punterWin)
+  .map(calculatePoints)
   .filter((a) => a >= 1)
   .reduce((acc, cur) => acc + cur);
 
-console.log(part1);
+const part2 = rawData.split(/\n/).map(cardObjects).map(punterWin);
+
+console.log(part2);
