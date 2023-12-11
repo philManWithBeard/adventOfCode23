@@ -25,6 +25,15 @@ const calculatePoints = (matchingNumber) => {
   return points;
 };
 
+const winCount = (wins, i) => {
+  const winCount = wins.length;
+  const card = i + 1;
+  const cardCount = 1;
+  return { card, cardCount, winCount };
+};
+
+const cardAdd = () => {};
+
 const part1 = rawData
   .split(/\n/)
   .map(cardObjects)
@@ -33,6 +42,6 @@ const part1 = rawData
   .filter((a) => a >= 1)
   .reduce((acc, cur) => acc + cur);
 
-const part2 = rawData.split(/\n/).map(cardObjects).map(punterWin);
+const part2 = rawData.split(/\n/).map(cardObjects).map(punterWin).map(winCount);
 
 console.log(part2);
